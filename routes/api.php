@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\StatusController;
+use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +18,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// user
 Route::get('/users', [UserController::class, 'index']);
+
+// status
+Route::get('/statuses', [StatusController::class, 'index']);
+
+// task
+Route::get('/tasks', [TaskController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

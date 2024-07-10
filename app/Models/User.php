@@ -45,8 +45,8 @@ class User extends Authenticatable
     /**
      * Eloquent relationship with taskfollower
      */
-    public function user()
+    public function task_followers()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(TaskFollower::class);
     }
 }

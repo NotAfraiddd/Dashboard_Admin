@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\User;
+namespace App\Repositories\Status;
 
-use App\Models\User;
+use App\Models\Status;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +10,7 @@ use App\Repositories\BaseRepository;
 use App\Http\Controllers\Concerns\Paginatable;
 use App\Http\Controllers\Concerns\Searchable;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class StatusRepository extends BaseRepository implements StatusRepositoryInterface
 {
   use Paginatable, Searchable;
 
@@ -20,21 +20,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
    */
   public function getModel()
   {
-    return User::class;
+    return Status::class;
   }
 
   /**
-   * get user list
+   * get status list
    * @param Request $request
    * @return void
    */
-  public function getUserList(Request $request)
+  public function getStatusList(Request $request)
   {
     try {
-      $query = $this->model->with('task_followers')->get();
-      return $query;
+      return $this->model->get();
     } catch (Exception $ex) {
-      Log::error('Get user list: ' . $ex);
+      Log::error('Get status list: ' . $ex);
     }
   }
 }

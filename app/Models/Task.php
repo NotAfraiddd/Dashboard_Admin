@@ -29,9 +29,9 @@ class Task extends Model
     }
 
     /**
-     * Eloquent relationship with taskFollowers
+     * Eloquent relationship with task_followers
      */
-    public function taskFollowers()
+    public function task_followers()
     {
         return $this->hasMany(TaskFollower::class);
     }
