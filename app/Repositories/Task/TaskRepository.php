@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\BaseRepository;
 use App\Http\Controllers\Concerns\Paginatable;
 use App\Http\Controllers\Concerns\Searchable;
+use Illuminate\Support\Facades\DB;
 
 class TaskRepository extends BaseRepository implements TaskRepositoryInterface
 {
@@ -35,6 +36,25 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
       return $query;
     } catch (Exception $ex) {
       Log::error('Get status list: ' . $ex);
+    }
+  }
+
+  /**
+   * create task
+   * @return mixed
+   */
+  public function createTask(Request $request)
+  {
+    DB::beginTransaction();
+    try {
+      $data = $request->all();
+      $task = $this->model->create($data);
+      DB::commit();
+      return $task;
+    } catch (Exception $ex) {
+      DB::rollBack();
+      Log::error('Create task: ' . $ex);
+      return false;
     }
   }
 }

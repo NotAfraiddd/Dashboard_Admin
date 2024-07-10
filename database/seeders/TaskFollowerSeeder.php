@@ -24,7 +24,7 @@ class TaskFollowerSeeder extends Seeder
     ];
 
     foreach ($taskFollowers as $followerData) {
-      TaskFollower::updateOrInsert($followerData);
+      TaskFollower::updateOrInsert(['id' => $followerData['id']], $followerData);
     }
   }
 }

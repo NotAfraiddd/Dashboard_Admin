@@ -13,4 +13,10 @@ interface TaskRepositoryInterface extends RepositoryInterface
    * @return void
    */
   public function getTaskList(Request $request);
+
+  /**
+   * create task
+   * @return mixed
+   */
+  public function createTask(Request $request);
 }
