@@ -631,9 +631,9 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <router-link to="/">{{ $t('sales') }}</router-link>
+                            <router-link to="/">{{ $t('Task Management') }}</router-link>
                         </li>
-                        <li>
+                        <!-- <li>
                             <router-link to="/analytics">{{ $t('analytics') }}</router-link>
                         </li>
                         <li>
@@ -641,7 +641,7 @@
                         </li>
                         <li>
                             <router-link to="/crypto">{{ $t('crypto') }}</router-link>
-                        </li>
+                        </li> -->
                     </ul>
                 </li>
                 <li class="menu nav-item relative">
