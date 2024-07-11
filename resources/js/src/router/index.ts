@@ -1,17 +1,19 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { useAppStore } from '@/stores/index';
-import appSetting from '@/app-setting';
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { useAppStore } from "@/stores/index";
+import appSetting from "@/app-setting";
 
-import HomeView from '../views/index.vue';
+import HomeView from "../views/index.vue";
+import DetailUser from "../views/user/DetailUser.vue";
 
 const routes: RouteRecordRaw[] = [
     // dashboard
-    { path: '/', name: 'home', component: HomeView },
+    { path: "/", name: "home", component: HomeView },
+    { path: "/user/:id", name: "DetailUser", component: DetailUser },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
-    linkExactActiveClass: 'active',
+    linkExactActiveClass: "active",
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
@@ -25,10 +27,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const store = useAppStore();
 
-    if (to?.meta?.layout == 'auth') {
-        store.setMainLayout('auth');
+    if (to?.meta?.layout == "auth") {
+        store.setMainLayout("auth");
     } else {
-        store.setMainLayout('app');
+        store.setMainLayout("app");
     }
     next(true);
 });
