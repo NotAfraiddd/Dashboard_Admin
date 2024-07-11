@@ -103,7 +103,6 @@ import { RENDER_TYPE, PROGRESS } from "../constants";
 import BaseInput from "../components/BaseInput.vue";
 import BaseSelect from "../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
-import DetailUser from "./user/DetailUser.vue";
 
 const textFilter = ref("");
 const selectOption = ref({ id: 0, text: "Select options" });
@@ -236,6 +235,10 @@ const handleUpdateFilter = (newValue) => {
     textFilter.value = newValue;
 };
 
+/**
+ * Function to handle go to detail user
+ * @param data
+ */
 const handleRowClick = (data) => {
     router.push({ name: "DetailUser", params: { id: data.id } });
 };
