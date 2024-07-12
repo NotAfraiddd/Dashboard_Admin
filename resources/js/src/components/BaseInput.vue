@@ -40,7 +40,7 @@ const emit = defineEmits(["update"]);
 /**
  * Define a reactive reference for the input value
  */
-const inputValue = ref(null);
+const inputValue = ref(inputValueProps.value);
 
 /**
  * Watch

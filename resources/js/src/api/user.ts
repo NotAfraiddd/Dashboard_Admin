@@ -8,6 +8,13 @@ export const getListUser = (params) => {
 };
 
 /**
+ * API get list user name
+ */
+export const getListUsersName = () => {
+    return axios.get("/user/name");
+};
+
+/**
  * API create user
  * @param param
  */

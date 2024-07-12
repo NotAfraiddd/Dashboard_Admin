@@ -22,11 +22,11 @@
                 <div class="w-1/4">Name</div>
                 <div class="w-3/4 ">
                     <div v-if="!isEditName" class="w-full flex justify-between items-center">
-                        <span>Chi Bao</span>
+                        <span>{{ detailUser.name }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('name')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
-                        <BaseSelect :options="listSelects" v-model="textName" inputClass="w-72 mr-10" />
+                        <BaseSelect :options="listSelectsName" v-model="textName" inputClass="w-72 mr-10" />
                         <GroupButton @cancel="handleCancel('name')" @save="handleSave('name')" cancel-text="Cancel"
                             save-text="Ok">
                         </GroupButton>
@@ -55,7 +55,7 @@
                 <div class="w-1/4">Email</div>
                 <div class="w-3/4">
                     <div v-if="!isEditEmail" class="w-full flex justify-between items-center">
-                        <span>nguyenhuynhchibao@gmail.com</span>
+                        <span>{{ detailUser.email }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('email')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
@@ -71,7 +71,7 @@
                 <div class="w-1/4">Title task</div>
                 <div class="w-3/4">
                     <div v-if="!isEditTitle" class="w-full flex justify-between items-center">
-                        <span>Write document in Javascript</span>
+                        <span>{{ detailUser.tasks[0].title }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('title')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
@@ -87,7 +87,7 @@
                 <div class="w-1/4">Description</div>
                 <div class="w-3/4">
                     <div v-if="!isEditDescription" class="w-full flex justify-between items-center">
-                        <span>Write document in Javascript</span>
+                        <span>{{ detailUser.tasks[0].description }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
                             @click="handleEdit('description')">
                     </div>
@@ -103,7 +103,7 @@
                 <div class="w-1/4">Deadline</div>
                 <div class="w-3/4">
                     <div v-if="!isEditDeadline" class="w-full flex justify-between items-center">
-                        <span>28/07/2024</span>
+                        <span>{{ detailUser.tasks[0].deadline }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
                             @click="handleEdit('deadline')">
                     </div>
@@ -150,7 +150,7 @@ import BaseInput from "../../components/BaseInput.vue";
 import Work from "../../components/Work.vue";
 import BaseSelect from '../../components/BaseSelect.vue';
 import VueMultiselect from 'vue-multiselect'
-import { getUserDetail } from "../../api/user";
+import { getListUsersName, getUserDetail } from "../../api/user";
 
 export default defineComponent({
     components: {
@@ -172,6 +172,8 @@ export default defineComponent({
             isEditDescription: false,
             isEditDeadline: false,
             isEditFollowers: false,
+            detailUser: null,
+            detailListUserFollowers: null,
             listStatus: [
                 { id: 1, name: "Not Start" },
                 { id: 2, name: "In Process" },
@@ -179,28 +181,15 @@ export default defineComponent({
                 { id: 4, name: "Done" },
             ],
             listProcess: [],
-            listSelects: [
-                { id: 0, text: "Select options" },
-                { id: 1, text: "Not start" },
-                { id: 2, text: "In process" },
-                { id: 3, text: "Pending" },
-                { id: 4, text: "Done" },
-            ],
+            listSelectsName: [],
             chooseYearInput: null,
-            textName: { id: 0, text: "Select options" },
+            textName: {},
             textEmail: null,
             textTitle: null,
             textDescription: null,
             textDeadline: null,
             multiFollowers: [],
-            listFollowers: [
-                { id: 1, name: 'Vue.js' },
-                { id: 2, name: 'Adonis' },
-                { id: 3, name: 'Rails' },
-                { id: 4, name: 'Sinatra' },
-                { id: 5, name: 'Laravel' },
-                { id: 6, name: 'Phoenix' }
-            ]
+            listFollowers: []
         };
     },
     computed: {
@@ -211,22 +200,50 @@ export default defineComponent({
         },
     },
     methods: {
+        /**
+         * get detail task of user
+         * @param data 
+         */
         async getDetailTaskOfUser(data) {
             try {
                 const params = {
                     task_id: this.idTask,
                 }
-                console.log(this.idTask);
                 const res = await getUserDetail(data, params);
-                this.listProcess = res.data.tasks[0].statuses
+                this.detailUser = res.data;
+                this.textEmail = res.data.email;
+                this.textTitle = res.data.tasks[0].title;
+                this.textDescription = res.data.tasks[0].description;
+                this.textDeadline = res.data.tasks[0].deadline;
+                this.listProcess = res.data.tasks[0].statuses;
+                this.getUserFollowers(res.data.tasks[0].task_followers);
 
+                const resName = await getListUsersName();
+                this.listSelectsName.unshift({ id: 0, text: "Select options" });
+                this.listSelectsName.push(...resName.data.map(user => {
+                    return {
+                        id: user.id,
+                        text: user.name
+                    };
+                }));
+
+                this.textName = this.listSelectsName.find(item => item.id == this.detailUser?.id && item.text == this.detailUser?.name);
             } catch (error) {
-                this.$notification.notify({
-                    title: ERROR_MESSAGE.create_fail,
-                    type: "error",
-                });
-                console.error("Error create statuses:", error);
+                console.error("Error get detail", error);
             }
+        },
+
+        /**
+         * get all list user follower
+         * @param data 
+         */
+        getUserFollowers(data) {
+            this.listFollowers = data.map(item => {
+                return ({
+                    id: item.user.id,
+                    name: item.user.name,
+                })
+            })
         },
 
         /**

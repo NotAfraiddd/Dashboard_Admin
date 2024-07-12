@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 // user
 Route::get('/users', [UserController::class, 'index']);
+Route::get('/user/name', [UserController::class, 'getNameAllUser']);
 Route::post('/user/create', [UserController::class, 'create']);
 Route::get('/user/{user}/detail', [UserController::class, 'detail']);
 Route::post('/user/{user}/update', [UserController::class, 'update']);

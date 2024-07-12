@@ -35,6 +35,21 @@ class UserController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     * @return \Illuminate\Http\Response
+     */
+    public function getNameAllUser()
+    {
+        try {
+            $data = User::select('id', 'name')->get();
+            return response()->json($data);
+        } catch (Exception $ex) {
+            Log::error('Get List user: ' . $ex);
+            return response()->json(['error' => 'Error server'], 500);
+        }
+    }
+
+    /**
      * Detail User with specific task ID
      * @param int $id
      * @param Request $request
