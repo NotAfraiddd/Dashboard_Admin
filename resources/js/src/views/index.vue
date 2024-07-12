@@ -17,7 +17,7 @@
                 class="rounded-md btn-primary w-24 h-9"
                 @click="handleSearch"
             >
-                検索
+                Search
             </button>
         </div>
         <BaseTable :data="tableData" :columns="tableColumns">

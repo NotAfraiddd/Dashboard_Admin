@@ -5,6 +5,7 @@
         "build": "vite build"
     },
     "dependencies": {
+        "@vuepic/vue-datepicker": "^8.8.1",
         "@vueuse/head": "^0.9.7",
         "pinia": "^2.0.22",
         "vue": "^3.2.37",

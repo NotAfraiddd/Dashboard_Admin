@@ -52,19 +52,12 @@ watch(inputValue, (newVal) => {
 
 <template>
     <div class="search-input">
-        <input
-            :type="typeInput"
-            :class="[
-                'border focus-visible:outline-none h-9 rounded-md',
-                !iconSearch ? 'pl-5' : 'pl-10',
-                inputClass,
-            ]"
-            :placeholder="placeholder"
-            spellcheck="false"
-            v-model="inputValue"
-            @keydown="validText"
-            :maxlength="maxlength"
-        />
+        <input :type="typeInput" :class="[
+            'border border-[#ddd] focus-visible:outline-none h-9 rounded-md',
+            !iconSearch ? 'pl-5' : 'pl-10',
+            inputClass,
+        ]" :placeholder="placeholder" spellcheck="false" v-model="inputValue" @keydown="validText"
+            :maxlength="maxlength" />
         <div v-if="iconSearch">
             <img :src="SEARCH" alt="" class="search-icon w-5 h-5" />
         </div>
