@@ -12,3 +12,11 @@ export const PROGRESS = {
     pending: 3,
     done: 4,
 };
+
+export const ERROR_MESSAGE = {
+    empty_data: "You have not entered all the data yet",
+    create_success: "Created success",
+    create_fail: "Created failed",
+    update_success: "Updated success",
+    update_fail: "Updated failed",
+};

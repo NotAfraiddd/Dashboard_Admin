@@ -23,6 +23,9 @@ Route::get('/users', [UserController::class, 'index']);
 
 // status
 Route::get('/statuses', [StatusController::class, 'index']);
+Route::post('/status/create', [StatusController::class, 'create']);
+Route::get('/status/{status}/detail', [StatusController::class, 'detail']);
+Route::post('/status/{status}/update', [StatusController::class, 'update']);
 
 // task
 Route::get('/tasks', [TaskController::class, 'index']);

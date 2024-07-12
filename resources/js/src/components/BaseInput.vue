@@ -31,7 +31,7 @@ const props = defineProps({
         default: false,
     },
 });
-
+const { inputValueProps } = toRefs(props);
 /**
  * Define the 'update' event emitter using defineEmits
  */
@@ -40,13 +40,17 @@ const emit = defineEmits(["update"]);
 /**
  * Define a reactive reference for the input value
  */
-const inputValue = ref(props.inputValueProps);
+const inputValue = ref(null);
 
 /**
  * Watch
  */
 watch(inputValue, (newVal) => {
     emit("update", newVal);
+});
+
+watch(inputValueProps, (newVal) => {
+    inputValue.value = newVal;
 });
 </script>
 

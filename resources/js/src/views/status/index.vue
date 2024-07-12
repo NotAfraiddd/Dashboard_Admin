@@ -15,7 +15,7 @@
         </div>
       </template>
       <template #color="{ record }">
-        <div :style="{ backgroundColor: record.color }" class="w-5 h-5 rounded-full">
+        <div :style="{ backgroundColor: record.color }" class="w-5 h-5 rounded-full border">
         </div>
       </template>
     </BaseTable>
@@ -32,7 +32,7 @@ import { RENDER_TYPE } from "../../constants";
 import BaseInput from "../../components/BaseInput.vue";
 import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
-
+import { getListStatus } from "../../api/status";
 const textFilter = ref("");
 const selectOption = ref({ id: 0, text: "Select options" });
 const listSelects = ref([
@@ -42,19 +42,8 @@ const listSelects = ref([
   { id: 3, text: "Pending" },
   { id: 4, text: "Done" },
 ]);
-
-const tableData = ref([
-  {
-    id: 1,
-    name: "Jane",
-    color: "#d9d9d9",
-  },
-  {
-    id: 2,
-    name: "Jane",
-    color: "#000000",
-  },
-]);
+const router = useRouter();
+const tableData = ref([]);
 
 const tableColumns = ref([
   {
@@ -75,7 +64,27 @@ const tableColumns = ref([
   },
 ]);
 
-const router = useRouter();
+/**
+ * get list status
+ */
+const getListStatusesFromApi = async () => {
+  try {
+    const res = await getListStatus();
+    tableData.value = [];
+    res.data.forEach(item => {
+      tableData.value.push({
+        id: item?.id,
+        name: item?.name,
+        color: item?.color,
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching list statuses:", error);
+  }
+}
+
+// list apis
+getListStatusesFromApi();
 
 /**
 * Function to handle the search event

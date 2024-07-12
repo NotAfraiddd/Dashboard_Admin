@@ -3,6 +3,11 @@ import App from "@/App.vue";
 
 const app = createApp(App);
 
+// notification
+import Notifications from "@kyvg/vue3-notification";
+app.use(Notifications);
+
+// select color
 import VSwatches from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
 app.use(VSwatches);
