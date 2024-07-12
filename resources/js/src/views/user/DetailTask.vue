@@ -34,6 +34,24 @@
                 </div>
             </div>
             <div class="flex w-full justify-center items-center my-3">
+                <div class="w-1/4">Followers</div>
+                <div class="w-3/4 ">
+                    <div v-if="!isEditFollowers" class="w-full flex justify-between items-center">
+                        <span>Chi Bao</span>
+                        <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
+                            @click="handleEdit('followers')">
+                    </div>
+                    <div v-else class="w-full flex justify-between items-center mr-3">
+                        <VueMultiselect v-model="multiFollowers" :options="listFollowers" :multiple="true" class="w-72"
+                            :preserve-search="true" :close-on-select="true" placeholder="Choose users for task"
+                            label="name" track-by="name" />
+                        <GroupButton @cancel="handleCancel('followers')" @save="handleSave('followers')"
+                            cancel-text="Cancel" save-text="Ok">
+                        </GroupButton>
+                    </div>
+                </div>
+            </div>
+            <div class="flex w-full justify-center items-center my-3">
                 <div class="w-1/4">Email</div>
                 <div class="w-3/4">
                     <div v-if="!isEditEmail" class="w-full flex justify-between items-center">
@@ -131,11 +149,12 @@ import GroupButton from "../../components/GroupButton.vue";
 import BaseInput from "../../components/BaseInput.vue";
 import Work from "../../components/Work.vue";
 import BaseSelect from '../../components/BaseSelect.vue';
+import VueMultiselect from 'vue-multiselect'
 
 export default defineComponent({
     components: {
         draggable: VueDraggableNext,
-        GroupButton, BaseInput, Work, BaseSelect
+        GroupButton, BaseInput, Work, BaseSelect, VueMultiselect
     },
     created() {
         this.DELETE = DELETE;
@@ -148,6 +167,7 @@ export default defineComponent({
             isEditTitle: false,
             isEditDescription: false,
             isEditDeadline: false,
+            isEditFollowers: false,
             listStatus: [
                 { id: 1, name: "Not Start" },
                 { id: 2, name: "In Process" },
@@ -171,6 +191,15 @@ export default defineComponent({
             textTitle: null,
             textDescription: null,
             textDeadline: null,
+            multiFollowers: null,
+            listFollowers: [
+                { id: 1, name: 'Vue.js' },
+                { id: 2, name: 'Adonis' },
+                { id: 3, name: 'Rails' },
+                { id: 4, name: 'Sinatra' },
+                { id: 5, name: 'Laravel' },
+                { id: 6, name: 'Phoenix' }
+            ]
         };
     },
     computed: {
@@ -229,6 +258,9 @@ export default defineComponent({
                     break;
                 case 'deadline':
                     this.isEditDeadline = state;
+                    break;
+                case 'followers':
+                    this.isEditFollowers = state;
                     break;
                 default:
                     break;
@@ -297,3 +329,4 @@ export default defineComponent({
     min-width: 288px;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
