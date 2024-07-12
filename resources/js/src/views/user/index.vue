@@ -137,6 +137,7 @@ const handleUpdateFilter = (newValue) => {
  * @param data
  */
 const handleRowClick = (data) => {
+    localStorage.setItem('idTask', data.id_task)
     router.push({ name: "DetailTask", params: { id: data.id } });
 };
 
@@ -159,6 +160,8 @@ const getListUsersFromApi = async () => {
         res.data.forEach(user => {
             user.tasks.forEach(task => {
                 arr.push({
+                    id_task: task.id,
+                    id: user?.id,
                     name: user?.name,
                     email: user?.email,
                     task_title: task?.title,

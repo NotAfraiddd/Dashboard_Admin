@@ -13,4 +13,11 @@ interface UserRepositoryInterface extends RepositoryInterface
    * @return void
    */
   public function getUserList(Request $request);
+
+  /**
+   * get detail user 
+   * @param Request $request
+   * @return void
+   */
+  public function getDetail($id, Request $request);
 }

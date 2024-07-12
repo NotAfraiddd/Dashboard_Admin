@@ -33,7 +33,6 @@ import { useNotification } from "@kyvg/vue3-notification";
 import { ERROR_MESSAGE } from '../../constants';
 
 const route = useRoute();
-const router = useRoute();
 const hasParam = ref(route.params.id !== undefined);
 const idStatus = ref(route.params.id);
 const textNameProcess = ref(null);
@@ -76,7 +75,7 @@ const createStatusFromApi = async () => {
           title: ERROR_MESSAGE.create_success,
           type: "success",
         });
-        router.push({ name: "Status" });
+        route.push({ name: "Status" });
       }
     } else {
       notification.notify({
@@ -108,7 +107,7 @@ const updateStatusFromApi = async () => {
           title: ERROR_MESSAGE.update_success,
           type: "success",
         });
-        router.push({ name: "Status" });
+        route.push({ name: "Status" });
       }
     } else {
       notification.notify({

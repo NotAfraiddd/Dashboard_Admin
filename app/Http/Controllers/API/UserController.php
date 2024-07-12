@@ -35,18 +35,19 @@ class UserController extends Controller
     }
 
     /**
-     * Detail User
+     * Detail User with specific task ID
      * @param int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function detail($id)
+    public function detail($id, Request $request)
     {
         try {
-            $status = User::findOrFail($id);
-            return response()->json($status);
+            $data = $this->userRepo->getDetail($id, $request);
+            return response()->json($data);
         } catch (Exception $ex) {
             Log::error('Detail User: ' . $ex);
-            return response()->json(['error' => 'サーバーが不正です。'], 500);
+            return response()->json(['error' => 'Error server'], 500);
         }
     }
 }

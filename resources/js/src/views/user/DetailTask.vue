@@ -137,9 +137,6 @@
                     <div class="text-center py-2 text-gray-500">Put process here</div>
                 </template>
             </draggable>
-            <div class="mt-8 text-center p-2 rounded-lg border-dotted border-4 cursor-pointer" @click="">
-                + Add process
-            </div>
         </div>
     </div>
 </template>
@@ -153,6 +150,7 @@ import BaseInput from "../../components/BaseInput.vue";
 import Work from "../../components/Work.vue";
 import BaseSelect from '../../components/BaseSelect.vue';
 import VueMultiselect from 'vue-multiselect'
+import { getUserDetail } from "../../api/user";
 
 export default defineComponent({
     components: {
@@ -162,9 +160,12 @@ export default defineComponent({
     created() {
         this.DELETE = DELETE;
         this.PENCIL = PENCIL;
+        this.idTask = JSON.parse(localStorage.getItem('idTask'));
+        this.idTask && this.getDetailTaskOfUser(this.$route.params.id);
     },
     data() {
         return {
+            idTask: null,
             isEditName: false,
             isEditEmail: false,
             isEditTitle: false,
@@ -177,10 +178,7 @@ export default defineComponent({
                 { id: 3, name: "Pending" },
                 { id: 4, name: "Done" },
             ],
-            listProcess: [
-                { id: 1, name: "Not Start" },
-                { id: 4, name: "Done" },
-            ],
+            listProcess: [],
             listSelects: [
                 { id: 0, text: "Select options" },
                 { id: 1, text: "Not start" },
@@ -213,6 +211,24 @@ export default defineComponent({
         },
     },
     methods: {
+        async getDetailTaskOfUser(data) {
+            try {
+                const params = {
+                    task_id: this.idTask,
+                }
+                console.log(this.idTask);
+                const res = await getUserDetail(data, params);
+                this.listProcess = res.data.tasks[0].statuses
+
+            } catch (error) {
+                this.$notification.notify({
+                    title: ERROR_MESSAGE.create_fail,
+                    type: "error",
+                });
+                console.error("Error create statuses:", error);
+            }
+        },
+
         /**
          * update new value of textDescription
          * @param newValue
@@ -245,6 +261,11 @@ export default defineComponent({
             this.textEmail = newVal;
         },
 
+        /**
+         * turn on or off edit
+         * @param field 
+         * @param state 
+         */
         setEditingState(field, state) {
             switch (field) {
                 case 'name':

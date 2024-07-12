@@ -1,34 +1,34 @@
 import axios from "../config/axios";
 
 /**
- * API get list status
+ * API get list user
  */
 export const getListUser = (params) => {
     return axios.get("/users", { params });
 };
 
 /**
- * API create status
+ * API create user
  * @param param
  */
 export const createStatus = (param: FormData) => {
-    return axios.post("/status/create", param);
+    return axios.post("/user/create", param);
 };
 
 /**
- * API update status
+ * API update user
  * @param param
  * @param id
  */
 export const updateStatus = (id: any, param: any) => {
-    return axios.post(`/status/${id}/update`, param);
+    return axios.post(`/user/${id}/update`, param);
 };
 
 /**
- * API get status detail
+ * API get user detail
  * @param param
  * @param id
  */
-export const getStatusDetail = (id: any) => {
-    return axios.get(`/status/${id}/detail`);
+export const getUserDetail = (id: any, params: any) => {
+    return axios.get(`/user/${id}/detail`, { params });
 };

@@ -37,4 +37,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
       Log::error('Get user list: ' . $ex);
     }
   }
+
+  /**
+   * get detail user 
+   * @param Request $request
+   * @return void
+   */
+  public function getDetail($id, Request $request)
+  {
+    try {
+      $taskId = $request->task_id;
+
+      $user = User::with(['tasks' => function ($query) use ($taskId) {
+        $query->where('id', $taskId)
+          ->with('task_followers.user', 'statuses');
+      }])->findOrFail($id);
+
+      return $user;
+    } catch (Exception $ex) {
+      Log::error('Error in getDetail method: ' . $ex->getMessage());
+      return response()->json(['error' => 'Error server'], 500);
+    }
+  }
 }

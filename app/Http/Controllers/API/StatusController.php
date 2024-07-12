@@ -83,7 +83,7 @@ class StatusController extends Controller
             return response()->json($status);
         } catch (Exception $ex) {
             Log::error('Detail Status: ' . $ex);
-            return response()->json(['error' => 'サーバーが不正です。'], 500);
+            return response()->json(['error' => 'Error server'], 500);
         }
     }
 }
