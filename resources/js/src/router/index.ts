@@ -7,7 +7,6 @@ import StatusView from "../views/status/index.vue";
 import DetailTask from "../views/user/DetailTask.vue";
 import CreateTask from "../views/user/CreateTask.vue";
 import CreateStatus from "../views/status/CreateStatus.vue";
-import DetailStatus from "../views/status/DetailStatus.vue";
 
 const routes: RouteRecordRaw[] = [
     // dashboard
@@ -16,7 +15,7 @@ const routes: RouteRecordRaw[] = [
     { path: "/task-of-user/:id", name: "DetailTask", component: DetailTask },
     { path: "/status", name: "Status", component: StatusView },
     { path: "/status/create", name: "CreateStatus", component: CreateStatus },
-    { path: "/status/:id", name: "DetailStatus", component: DetailStatus },
+    { path: "/status/:id", name: "DetailStatus", component: CreateStatus },
 ];
 
 const router = createRouter({
