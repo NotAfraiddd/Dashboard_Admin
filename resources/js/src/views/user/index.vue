@@ -67,10 +67,10 @@
 
 <script setup>
 import { ref } from "vue";
-import BaseTable from "../components/BaseTable.vue";
-import { RENDER_TYPE, PROGRESS } from "../constants";
-import BaseInput from "../components/BaseInput.vue";
-import BaseSelect from "../components/BaseSelect.vue";
+import BaseTable from "../../components/BaseTable.vue";
+import { RENDER_TYPE, PROGRESS } from "../../constants";
+import BaseInput from "../../components/BaseInput.vue";
+import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
 
 const textFilter = ref("");

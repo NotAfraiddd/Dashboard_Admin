@@ -2,15 +2,21 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { useAppStore } from "@/stores/index";
 import appSetting from "@/app-setting";
 
-import HomeView from "../views/index.vue";
+import HomeView from "../views/user/index.vue";
+import StatusView from "../views/status/index.vue";
 import DetailTask from "../views/user/DetailTask.vue";
 import CreateTask from "../views/user/CreateTask.vue";
+import CreateStatus from "../views/status/CreateStatus.vue";
+import DetailStatus from "../views/status/DetailStatus.vue";
 
 const routes: RouteRecordRaw[] = [
     // dashboard
     { path: "/", name: "home", component: HomeView },
     { path: "/task/create", name: "CreateTask", component: CreateTask },
     { path: "/task-of-user/:id", name: "DetailTask", component: DetailTask },
+    { path: "/status", name: "Status", component: StatusView },
+    { path: "/status/create", name: "CreateStatus", component: CreateStatus },
+    { path: "/status/:id", name: "DetailStatus", component: DetailStatus },
 ];
 
 const router = createRouter({

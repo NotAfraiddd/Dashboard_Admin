@@ -137,6 +137,9 @@
                     <div class="text-center py-2 text-gray-500">Put process here</div>
                 </template>
             </draggable>
+            <div class="mt-8 text-center p-2 rounded-lg border-dotted border-4 cursor-pointer" @click="">
+                + Add process
+            </div>
         </div>
     </div>
 </template>

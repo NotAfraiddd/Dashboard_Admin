@@ -1,0 +1,114 @@
+<template>
+  <div class="border p-4 min-h-screen bg-white rounded-xl">
+    <div class="mb-5 flex">
+      <BaseInput placeholder="Enter search information" @update="handleUpdateFilter" :inputValueProps="textFilter"
+        inputClass="w-72 mr-10" :icon-search="true" />
+      <BaseSelect :options="listSelects" v-model="selectOption" inputClass="mr-10" />
+      <button class="rounded-md btn-primary w-24 h-9" @click="handleSearch">
+        Search
+      </button>
+    </div>
+    <BaseTable :data="tableData" :columns="tableColumns">
+      <template #name="{ record }">
+        <div class="break-word text-overflow" @click="handleRowClick(record)">
+          {{ record.name }}
+        </div>
+      </template>
+      <template #color="{ record }">
+        <div :style="{ backgroundColor: record.color }" class="w-5 h-5 rounded-full">
+        </div>
+      </template>
+    </BaseTable>
+    <div class="mt-8 text-center p-5 rounded-lg border-dotted border-4 cursor-pointer" @click="navigateCreateStatus">
+      <span>＋ Add New Status</span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import BaseTable from "../../components/BaseTable.vue";
+import { RENDER_TYPE } from "../../constants";
+import BaseInput from "../../components/BaseInput.vue";
+import BaseSelect from "../../components/BaseSelect.vue";
+import { useRouter } from "vue-router";
+
+const textFilter = ref("");
+const selectOption = ref({ id: 0, text: "Select options" });
+const listSelects = ref([
+  { id: 0, text: "Select options" },
+  { id: 1, text: "Not start" },
+  { id: 2, text: "In process" },
+  { id: 3, text: "Pending" },
+  { id: 4, text: "Done" },
+]);
+
+const tableData = ref([
+  {
+    id: 1,
+    name: "Jane",
+    color: "#d9d9d9",
+  },
+  {
+    id: 2,
+    name: "Jane",
+    color: "#000000",
+  },
+]);
+
+const tableColumns = ref([
+  {
+    headerClass: "text-center",
+    columnClass: "hover:underline cursor-pointer",
+    title: "Name",
+    key: "name",
+    slotName: "name",
+    renderType: RENDER_TYPE.slot,
+  },
+  {
+    headerClass: "text-center",
+    columnClass: "",
+    title: "Color",
+    key: "color",
+    slotName: "color",
+    renderType: RENDER_TYPE.slot,
+  },
+]);
+
+const router = useRouter();
+
+/**
+* Function to handle the search event
+* @param newValue
+*/
+const handleUpdateFilter = (newValue) => {
+  textFilter.value = newValue;
+};
+
+/**
+* Function to handle go to detail user
+* @param data
+*/
+const handleRowClick = (data) => {
+  router.push({ name: "DetailStatus", params: { id: data.id } });
+};
+
+const navigateCreateStatus = () => {
+  router.push({ name: "CreateStatus" });
+
+}
+</script>
+
+<style lang="css" scoped>
+.text-overflow {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+}
+
+.break-word {
+  word-break: break-word;
+}
+</style>
