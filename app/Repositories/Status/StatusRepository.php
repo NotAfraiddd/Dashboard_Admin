@@ -32,11 +32,23 @@ class StatusRepository extends BaseRepository implements StatusRepositoryInterfa
   public function getStatusList(Request $request)
   {
     try {
-      return $this->model->get();
+      $keyword = $request->keyword;
+      $query = Status::query();
+
+      if (isset($keyword)) {
+        $keyword = preg_replace('/\s+/', '', $keyword);
+        $query->where(function ($q) use ($keyword) {
+          $q->where("name", 'like', "%$keyword%")
+            ->orWhere("color", 'like', "%$keyword%");
+        });
+      }
+
+      return $query->get();
     } catch (Exception $ex) {
       Log::error('Get status list: ' . $ex);
     }
   }
+
 
   /**
    * create Status

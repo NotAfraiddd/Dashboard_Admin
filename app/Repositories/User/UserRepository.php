@@ -31,7 +31,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
   public function getUserList(Request $request)
   {
     try {
-      $query = $this->model->with('task_followers')->get();
+      $query = $this->model->with('task_followers.task.status')->get();
       return $query;
     } catch (Exception $ex) {
       Log::error('Get user list: ' . $ex);

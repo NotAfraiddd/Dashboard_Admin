@@ -3,8 +3,8 @@ import axios from "../config/axios";
 /**
  * API get list status
  */
-export const getListStatus = (params) => {
-    return axios.get("/statuses", { params });
+export const getListUser = (params) => {
+    return axios.get("/users", { params });
 };
 
 /**

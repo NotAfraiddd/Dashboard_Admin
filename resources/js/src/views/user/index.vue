@@ -72,15 +72,12 @@ import { RENDER_TYPE, PROGRESS } from "../../constants";
 import BaseInput from "../../components/BaseInput.vue";
 import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
+import { getListStatus } from "../../api/status";
 
 const textFilter = ref("");
 const selectOption = ref({ id: 0, text: "Select options" });
 const listSelects = ref([
     { id: 0, text: "Select options" },
-    { id: 1, text: "Not start" },
-    { id: 2, text: "In process" },
-    { id: 3, text: "Pending" },
-    { id: 4, text: "Done" },
 ]);
 
 const tableData = ref([
@@ -191,6 +188,13 @@ const tableColumns = ref([
 const router = useRouter();
 
 /**
+ * handle search
+ */
+const handleSearch = () => {
+    getListUsersFromApi();
+}
+
+/**
  * Function to handle the search event
  * @param newValue
  */
@@ -210,6 +214,66 @@ const navigateCreateTask = () => {
     router.push({ name: "CreateTask" });
 
 }
+
+/**
+ * get list users
+ */
+const getListUsersFromApi = async () => {
+    try {
+        const params = {
+            keyword: textFilter.value || "",
+            process: selectOption.value.id || 0,
+        };
+        const res = await getListStatus(params);
+        // {
+        // id: 2,
+        // name: "Jane",
+        // email: "nguyenhuynhchibao@gmail.com",
+        // task_title: "Write document in Javascript",
+        // users_follow: [
+        //     {
+        //         id: 1,
+        //         name: "chi bao",
+        //     },
+        // ],
+        // processes: [PROGRESS.in_process],
+        // },
+        res.data.forEach(item => {
+            tableData.value.push({
+                id: item?.id,
+                name: item?.name,
+                email: item?.email,
+                email: item?.email,
+            });
+        });
+    } catch (error) {
+        console.error("Error fetching list statuses:", error);
+    }
+}
+
+/**
+ * get list status
+ */
+const getListStatusesFromApi = async () => {
+    try {
+        const params = {
+            keyword: textFilter.value || "",
+            process: selectOption.value.id || 0,
+        };
+        const res = await getListStatus(params);
+        res.data.forEach(item => {
+            listSelects.value.push({
+                id: item?.id,
+                text: item?.name,
+            });
+        });
+    } catch (error) {
+        console.error("Error fetching list statuses:", error);
+    }
+}
+
+getListStatusesFromApi();
+
 </script>
 
 <style lang="css" scoped>

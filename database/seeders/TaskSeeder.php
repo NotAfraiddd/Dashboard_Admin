@@ -20,14 +20,12 @@ class TaskSeeder extends Seeder
         'title' => 'Task 1',
         'description' => 'Description of Task 1',
         'deadline' => now()->addDays(7),
-        'status_id' => 1,
       ],
       [
         'id' => 2,
         'title' => 'Task 2',
         'description' => 'Description of Task 2',
         'deadline' => now()->addDays(14),
-        'status_id' => 2,
       ],
     ];
 

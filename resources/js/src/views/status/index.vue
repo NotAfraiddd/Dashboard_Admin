@@ -3,7 +3,6 @@
     <div class="mb-5 flex">
       <BaseInput placeholder="Enter search information" @update="handleUpdateFilter" :inputValueProps="textFilter"
         inputClass="w-72 mr-10" :icon-search="true" />
-      <BaseSelect :options="listSelects" v-model="selectOption" inputClass="mr-10" />
       <button class="rounded-md btn-primary w-24 h-9" @click="handleSearch">
         Search
       </button>
@@ -30,18 +29,9 @@ import { ref } from "vue";
 import BaseTable from "../../components/BaseTable.vue";
 import { RENDER_TYPE } from "../../constants";
 import BaseInput from "../../components/BaseInput.vue";
-import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
 import { getListStatus } from "../../api/status";
 const textFilter = ref("");
-const selectOption = ref({ id: 0, text: "Select options" });
-const listSelects = ref([
-  { id: 0, text: "Select options" },
-  { id: 1, text: "Not start" },
-  { id: 2, text: "In process" },
-  { id: 3, text: "Pending" },
-  { id: 4, text: "Done" },
-]);
 const router = useRouter();
 const tableData = ref([]);
 
@@ -65,11 +55,21 @@ const tableColumns = ref([
 ]);
 
 /**
+ * handle search
+ */
+const handleSearch = () => {
+  getListStatusesFromApi();
+}
+
+/**
  * get list status
  */
 const getListStatusesFromApi = async () => {
   try {
-    const res = await getListStatus();
+    const params = {
+      keyword: textFilter.value || "",
+    };
+    const res = await getListStatus(params);
     tableData.value = [];
     res.data.forEach(item => {
       tableData.value.push({
