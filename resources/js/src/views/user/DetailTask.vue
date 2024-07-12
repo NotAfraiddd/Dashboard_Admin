@@ -26,8 +26,7 @@
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('name')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
-                        <BaseInput placeholder="Enter name" @update="handleUpdateValue" :inputValueProps="textName"
-                            inputClass="w-72 mr-10" />
+                        <BaseSelect :options="listSelects" v-model="textName" inputClass="w-72 mr-10" />
                         <GroupButton @cancel="handleCancel('name')" @save="handleSave('name')" cancel-text="Cancel"
                             save-text="Ok">
                         </GroupButton>
@@ -42,7 +41,7 @@
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('email')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
-                        <BaseInput placeholder="Enter email" @update="handleUpdateValue" :inputValueProps="textEmail"
+                        <BaseInput placeholder="Enter email" @update="updateValueEmail" :inputValueProps="textEmail"
                             inputClass="w-72 mr-10" />
                         <GroupButton @cancel="handleCancel('email')" @save="handleSave('email')" cancel-text="Cancel"
                             save-text="Ok">
@@ -58,7 +57,7 @@
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('title')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
-                        <BaseInput placeholder="Enter title task" @update="handleUpdateValue"
+                        <BaseInput placeholder="Enter title task" @update="updateValueTitle"
                             :inputValueProps="textTitle" inputClass="w-72 mr-10" />
                         <GroupButton @cancel="handleCancel('title')" @save="handleSave('title')" cancel-text="Cancel"
                             save-text="Ok">
@@ -75,8 +74,7 @@
                             @click="handleEdit('description')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
-                        <BaseInput placeholder="Enter description" @update="handleUpdateValue"
-                            :inputValueProps="textDescription" inputClass="w-72 mr-10" />
+                        <Work :contentProp="textDescription" @update="handleUpdateTextEditor" />
                         <GroupButton @cancel="handleCancel('description')" @save="handleSave('description')"
                             cancel-text="Cancel" save-text="Ok">
                         </GroupButton>
@@ -93,8 +91,7 @@
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
                         <div class="w-72 mr-10">
-                            <VueDatePicker v-model="chooseYearInput" position="right" @open="showCalendarYear"
-                                placeholder="Set deadline ">
+                            <VueDatePicker v-model="textDeadline" position="right" placeholder="Set deadline ">
                                 <template #clear-icon>
                                     <img class="d-none" />
                                 </template>
@@ -132,11 +129,13 @@ import { VueDraggableNext } from "vue-draggable-next";
 import { PENCIL, DELETE } from "../../constants/img";
 import GroupButton from "../../components/GroupButton.vue";
 import BaseInput from "../../components/BaseInput.vue";
+import Work from "../../components/Work.vue";
+import BaseSelect from '../../components/BaseSelect.vue';
 
 export default defineComponent({
     components: {
         draggable: VueDraggableNext,
-        GroupButton, BaseInput
+        GroupButton, BaseInput, Work, BaseSelect
     },
     created() {
         this.DELETE = DELETE;
@@ -159,8 +158,15 @@ export default defineComponent({
                 { id: 1, name: "Not Start" },
                 { id: 4, name: "Done" },
             ],
+            listSelects: [
+                { id: 0, text: "Select options" },
+                { id: 1, text: "Not start" },
+                { id: 2, text: "In process" },
+                { id: 3, text: "Pending" },
+                { id: 4, text: "Done" },
+            ],
             chooseYearInput: null,
-            textName: null,
+            textName: { id: 0, text: "Select options" },
             textEmail: null,
             textTitle: null,
             textDescription: null,
@@ -175,10 +181,37 @@ export default defineComponent({
         },
     },
     methods: {
-        handleUpdateValue(newVal) {
-            this.textName = newVal
+        /**
+         * update new value of textDescription
+         * @param newValue
+         */
+        handleUpdateTextEditor(newValue) {
+            this.textDescription = newValue;
         },
 
+        /**
+         * update new value of textTitle
+         * @param newVal 
+         */
+        updateValueTitle(newVal) {
+            this.textTitle = newVal;
+        },
+
+        /**
+         * update new value of textName
+         * @param newVal 
+         */
+        updateValueName(newVal) {
+            this.textName = newVal;
+        },
+
+        /**
+         * update new value of textEmail
+         * @param newVal 
+         */
+        updateValueEmail(newVal) {
+            this.textEmail = newVal;
+        },
 
         setEditingState(field, state) {
             switch (field) {

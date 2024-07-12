@@ -3,12 +3,14 @@ import { useAppStore } from "@/stores/index";
 import appSetting from "@/app-setting";
 
 import HomeView from "../views/index.vue";
-import DetailUser from "../views/user/DetailUser.vue";
+import DetailTask from "../views/user/DetailTask.vue";
+import CreateTask from "../views/user/CreateTask.vue";
 
 const routes: RouteRecordRaw[] = [
     // dashboard
     { path: "/", name: "home", component: HomeView },
-    { path: "/user/:id", name: "DetailUser", component: DetailUser },
+    { path: "/task/create", name: "CreateTask", component: CreateTask },
+    { path: "/task-of-user/:id", name: "DetailTask", component: DetailTask },
 ];
 
 const router = createRouter({

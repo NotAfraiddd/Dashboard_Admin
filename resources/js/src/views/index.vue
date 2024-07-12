@@ -1,32 +1,18 @@
 <template>
     <div class="border p-4 min-h-screen bg-white rounded-xl">
         <div class="mb-5 flex">
-            <BaseInput
-                placeholder="Enter search information"
-                @update="handleUpdateFilter"
-                :inputValueProps="textFilter"
-                inputClass="w-72 mr-10"
-                :icon-search="true"
-            />
-            <BaseSelect
-                :options="listSelects"
-                v-model="selectOption"
-                inputClass="mr-10"
-            />
-            <button
-                class="rounded-md btn-primary w-24 h-9"
-                @click="handleSearch"
-            >
+            <BaseInput placeholder="Enter search information" @update="handleUpdateFilter" :inputValueProps="textFilter"
+                inputClass="w-72 mr-10" :icon-search="true" />
+            <BaseSelect :options="listSelects" v-model="selectOption" inputClass="mr-10" />
+            <button class="rounded-md btn-primary w-24 h-9" @click="handleSearch">
                 Search
             </button>
         </div>
         <BaseTable :data="tableData" :columns="tableColumns">
-            <template #avatar="{ record }">
-                <img
-                    :src="record.avatar"
-                    alt="Avatar"
-                    class="min-w-[40px] h-10 text-center"
-                />
+            <template #name="{ record }">
+                <div class="break-word text-overflow" @click="handleRowClick(record)">
+                    {{ record.name }}
+                </div>
             </template>
             <template #email="{ record }">
                 <div class="break-word text-overflow">
@@ -35,15 +21,8 @@
             </template>
             <template #users_follow="{ record }">
                 <div class="flex break-word flex-wrap text-overflow">
-                    <span
-                        v-for="(user, index) in record.users_follow"
-                        :key="user"
-                        class="w-fit"
-                    >
-                        <span
-                            class="hover:underline cursor-pointer"
-                            @click="handleRowClick(user)"
-                        >
+                    <span v-for="(user, index) in record.users_follow" :key="user" class="w-fit">
+                        <span class="hover:underline cursor-pointer" @click="handleRowClick(user)">
                             {{ user.name }}
                         </span>
                         <span v-if="index < record.users_follow.length - 1">
@@ -59,46 +38,36 @@
             </template>
             <template #processes="{ record }">
                 <div class="flex flex-wrap gap-2">
-                    <div
-                        v-for="item in record.processes"
-                        :key="item"
-                        class="w-fit"
-                    >
-                        <div
-                            class="border rounded-md w-20 text-center h-8 flex items-center justify-center"
-                            v-if="item.status === PROGRESS.not_start"
-                        >
+                    <div v-for="item in record.processes" :key="item" class="w-fit">
+                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center"
+                            v-if="item.status === PROGRESS.not_start">
                             Not Start
                         </div>
-                        <div
-                            class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-orange-200"
-                            v-if="item.status === PROGRESS.in_process"
-                        >
+                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-orange-200"
+                            v-if="item.status === PROGRESS.in_process">
                             In Process
                         </div>
-                        <div
-                            class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-blue-700"
-                            v-if="item.status === PROGRESS.pending"
-                        >
+                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-blue-700"
+                            v-if="item.status === PROGRESS.pending">
                             Pending
                         </div>
-                        <div
-                            class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-gray-500"
-                            v-if="item.status === PROGRESS.done"
-                        >
+                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-gray-500"
+                            v-if="item.status === PROGRESS.done">
                             Done
                         </div>
                     </div>
                 </div>
             </template>
         </BaseTable>
+        <div class="mt-8 text-center p-5 rounded-lg border-dotted border-4 cursor-pointer" @click="navigateCreateTask">
+            <span>＋ Add New Task</span>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import BaseTable from "../components/BaseTable.vue";
-import { AVATAR } from "../constants/img";
 import { RENDER_TYPE, PROGRESS } from "../constants";
 import BaseInput from "../components/BaseInput.vue";
 import BaseSelect from "../components/BaseSelect.vue";
@@ -116,7 +85,7 @@ const listSelects = ref([
 
 const tableData = ref([
     {
-        avatar: AVATAR,
+        id: 1,
         name: "John",
         email: "nguyenhuynhchibao@gmail.com",
         task_title: "Write document in Javascript",
@@ -162,7 +131,7 @@ const tableData = ref([
         ],
     },
     {
-        avatar: AVATAR,
+        id: 2,
         name: "Jane",
         email: "nguyenhuynhchibao@gmail.com",
         task_title: "Write document in Javascript",
@@ -179,17 +148,11 @@ const tableData = ref([
 const tableColumns = ref([
     {
         headerClass: "text-center",
-        columnClass: "",
-        title: "",
-        key: "avatar",
-        slotName: "avatar",
-        renderType: RENDER_TYPE.slot,
-    },
-    {
-        headerClass: "text-center",
         columnClass: "hover:underline cursor-pointer",
         title: "Name",
         key: "name",
+        slotName: "name",
+        renderType: RENDER_TYPE.slot,
     },
     {
         headerClass: "text-center",
@@ -240,8 +203,13 @@ const handleUpdateFilter = (newValue) => {
  * @param data
  */
 const handleRowClick = (data) => {
-    router.push({ name: "DetailUser", params: { id: data.id } });
+    router.push({ name: "DetailTask", params: { id: data.id } });
 };
+
+const navigateCreateTask = () => {
+    router.push({ name: "CreateTask" });
+
+}
 </script>
 
 <style lang="css" scoped>

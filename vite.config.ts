@@ -3,6 +3,9 @@ import vue from "@vitejs/plugin-vue";
 import path from "path";
 import vueI18n from "@intlify/vite-plugin-vue-i18n";
 import laravel from "laravel-vite-plugin";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default defineConfig({
     plugins: [
@@ -21,6 +24,9 @@ export default defineConfig({
             include: path.resolve("resources/js/src/locales/**"),
         }),
     ],
+    define: {
+        "process.env": process.env,
+    },
     resolve: {
         alias: {
             "@": path.resolve("./resources/js/src"),
