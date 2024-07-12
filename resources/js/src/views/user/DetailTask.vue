@@ -194,7 +194,7 @@ export default defineComponent({
             textTitle: null,
             textDescription: null,
             textDeadline: null,
-            multiFollowers: null,
+            multiFollowers: [],
             listFollowers: [
                 { id: 1, name: 'Vue.js' },
                 { id: 2, name: 'Adonis' },
@@ -326,10 +326,10 @@ export default defineComponent({
 });
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <style lang="css">
 .dp__input {
     font-size: 14px;
     min-width: 288px;
 }
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>

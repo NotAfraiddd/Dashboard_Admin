@@ -3,6 +3,10 @@ import App from "@/App.vue";
 
 const app = createApp(App);
 
+import VSwatches from "vue3-swatches";
+import "vue3-swatches/dist/style.css";
+app.use(VSwatches);
+
 // vue datepicker
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";

@@ -134,7 +134,7 @@ export default defineComponent({
       textTitle: null,
       textDescription: null,
       textDeadline: null,
-      multiFollowers: null,
+      multiFollowers: [],
       listFollowers: [
         { id: 1, name: 'Vue.js' },
         { id: 2, name: 'Adonis' },

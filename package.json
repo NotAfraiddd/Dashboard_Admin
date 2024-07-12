@@ -17,9 +17,9 @@
         "vue-i18n": "^9.2.2",
         "vue-multiselect": "^3.0.0-beta.3",
         "vue-router": "^4.1.5",
-        "vue-swatches": "^2.1.1",
         "vue3-perfect-scrollbar": "^1.6.0",
         "vue3-popper": "^1.5.0",
+        "vue3-swatches": "^1.2.4",
         "vuedraggable": "^4.1.0"
     },
     "devDependencies": {

@@ -1087,7 +1087,7 @@
 import { ref, onMounted } from 'vue';
 
 import { useAppStore } from '@/stores/index';
-import VueCollapsible from 'vue-height-collapsible/vue3';
+// import VueCollapsible from 'vue-height-collapsible/vue3';
 const store = useAppStore();
 const activeDropdown: any = ref('');
 const subActive: any = ref('');

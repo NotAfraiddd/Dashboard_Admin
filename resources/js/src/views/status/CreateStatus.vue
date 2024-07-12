@@ -10,7 +10,7 @@
     <div class="flex w-full justify-center items-center my-3">
       <div class="w-1/4">Color</div>
       <div class="w-3/4 flex justify-between items-center mr-3">
-        <!-- <v-swatches v-model="color"></v-swatches> -->
+        <VSwatches v-model="color" />
       </div>
     </div>
   </div>
@@ -18,8 +18,6 @@
 
 <script>
 import BaseInput from '../../components/BaseInput.vue';
-// import VSwatches from 'vue-swatches'
-// import "vue-swatches/dist/vue-swatches.css";
 
 export default {
   components: {
@@ -29,8 +27,6 @@ export default {
     return {
       textNameProcess: null,
       color: '#1CA085',
-      colorPickerTemp: null,
-      colorPicker: null
     };
   },
   methods: {
