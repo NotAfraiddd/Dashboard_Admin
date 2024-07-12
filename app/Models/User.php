@@ -49,4 +49,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(TaskFollower::class);
     }
+
+    /**
+     * Eloquent relationship with task
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'assign_id');
+    }
 }

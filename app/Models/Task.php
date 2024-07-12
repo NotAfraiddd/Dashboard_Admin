@@ -22,9 +22,9 @@ class Task extends Model
     ];
 
     /**
-     * Eloquent relationship with status
+     * Eloquent relationship with statuses
      */
-    public function status()
+    public function statuses()
     {
         return $this->hasMany(Status::class);
     }
@@ -35,5 +35,14 @@ class Task extends Model
     public function task_followers()
     {
         return $this->hasMany(TaskFollower::class);
+    }
+
+
+    /**
+     * Eloquent relationship with assign
+     */
+    public function assign()
+    {
+        return $this->belongsTo(User::class, 'assign_id');
     }
 }
