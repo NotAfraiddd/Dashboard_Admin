@@ -38,22 +38,10 @@
             </template>
             <template #processes="{ record }">
                 <div class="flex flex-wrap gap-2">
-                    <div v-for="item in record.processes" :key="item" class="w-fit">
+                    <div v-for="item in record.processes" :key="item.id" class="w-fit">
                         <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center"
-                            v-if="item.status === PROGRESS.not_start">
-                            Not Start
-                        </div>
-                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-orange-200"
-                            v-if="item.status === PROGRESS.in_process">
-                            In Process
-                        </div>
-                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-blue-700"
-                            v-if="item.status === PROGRESS.pending">
-                            Pending
-                        </div>
-                        <div class="border rounded-md w-20 text-center h-8 flex items-center justify-center bg-gray-500"
-                            v-if="item.status === PROGRESS.done">
-                            Done
+                            :style="{ background: item.color }">
+                            {{ item.name }}
                         </div>
                     </div>
                 </div>
@@ -73,6 +61,7 @@ import BaseInput from "../../components/BaseInput.vue";
 import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
 import { getListStatus } from "../../api/status";
+import { getListUser } from "../../api/user";
 
 const textFilter = ref("");
 const selectOption = ref({ id: 0, text: "Select options" });
@@ -80,67 +69,7 @@ const listSelects = ref([
     { id: 0, text: "Select options" },
 ]);
 
-const tableData = ref([
-    {
-        id: 1,
-        name: "John",
-        email: "nguyenhuynhchibao@gmail.com",
-        task_title: "Write document in Javascript",
-        users_follow: [
-            {
-                id: 1,
-                name: "chi bao",
-            },
-            {
-                id: 2,
-                name: "tien dat",
-            },
-            {
-                id: 3,
-                name: "an com chua",
-            },
-            {
-                id: 4,
-                name: "troi oi",
-            },
-            {
-                id: 5,
-                name: "buon ngu qua",
-            },
-        ],
-        processes: [
-            {
-                id: 1,
-                status: PROGRESS.not_start,
-            },
-            {
-                id: 2,
-                status: PROGRESS.in_process,
-            },
-            {
-                id: 3,
-                status: PROGRESS.pending,
-            },
-            {
-                id: 4,
-                status: PROGRESS.done,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: "Jane",
-        email: "nguyenhuynhchibao@gmail.com",
-        task_title: "Write document in Javascript",
-        users_follow: [
-            {
-                id: 1,
-                name: "chi bao",
-            },
-        ],
-        processes: [PROGRESS.in_process],
-    },
-]);
+const tableData = ref([]);
 
 const tableColumns = ref([
     {
@@ -194,6 +123,7 @@ const handleSearch = () => {
     getListUsersFromApi();
 }
 
+
 /**
  * Function to handle the search event
  * @param newValue
@@ -224,32 +154,41 @@ const getListUsersFromApi = async () => {
             keyword: textFilter.value || "",
             process: selectOption.value.id || 0,
         };
-        const res = await getListStatus(params);
-        // {
-        // id: 2,
-        // name: "Jane",
-        // email: "nguyenhuynhchibao@gmail.com",
-        // task_title: "Write document in Javascript",
-        // users_follow: [
-        //     {
-        //         id: 1,
-        //         name: "chi bao",
-        //     },
-        // ],
-        // processes: [PROGRESS.in_process],
-        // },
-        res.data.forEach(item => {
-            tableData.value.push({
-                id: item?.id,
-                name: item?.name,
-                email: item?.email,
-                email: item?.email,
-            });
-        });
+        const res = await getListUser(params);
+        const arr = [];
+        res.data.forEach(user => {
+            user.tasks.forEach(task => {
+                arr.push({
+                    name: user?.name,
+                    email: user?.email,
+                    task_title: task?.title,
+                    users_follow: getListFollowers(task?.task_followers),
+                    processes: getNewListStatus(task?.statuses),
+                })
+            })
+        })
+        tableData.value = arr;
     } catch (error) {
         console.error("Error fetching list statuses:", error);
     }
 }
+
+const getListFollowers = (data) => {
+    return data.map(item => ({
+        id: item.user.id,
+        name: item.user.name,
+    }));
+};
+
+const getNewListStatus = (data) => {
+    return data.map(item => ({
+        id: item.id,
+        name: item.name,
+        color: item.color,
+    }));
+};
+
+getListUsersFromApi();
 
 /**
  * get list status

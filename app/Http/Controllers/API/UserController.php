@@ -33,4 +33,20 @@ class UserController extends Controller
             return response()->json(['error' => 'Error server'], 500);
         }
     }
+
+    /**
+     * Detail User
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function detail($id)
+    {
+        try {
+            $status = User::findOrFail($id);
+            return response()->json($status);
+        } catch (Exception $ex) {
+            Log::error('Detail User: ' . $ex);
+            return response()->json(['error' => 'サーバーが不正です。'], 500);
+        }
+    }
 }
