@@ -161,26 +161,14 @@ const getListUsersFromApi = async () => {
         res.data.forEach(task => {
             arr.push({
                 id_task: task.id,
-                id: task?.id,
-                name: task?.name,
-                email: task?.email,
+                id: task?.assignee?.id,
+                name: task?.assignee?.name,
+                email: task?.assignee?.email,
                 task_title: task?.title,
-                users_follow: getListFollowers(task?.assignee?.task_followers)
+                users_follow: getListFollowers(task?.followers),
+                processes: getNewListStatus(task?.statuses),
             })
         });
-        // res.data.forEach(user => {
-        //     user.tasks.forEach(task => {
-        //         arr.push({
-        //             id_task: task.id,
-        //             id: user?.id,
-        //             name: user?.name,
-        //             email: user?.email,
-        //             task_title: task?.title,
-        //             users_follow: getListFollowers(task?.task_followers),
-        //             processes: getNewListStatus(task?.statuses),
-        //         })
-        //     })
-        // })
         tableData.value = arr;
     } catch (error) {
         console.error("Error fetching list statuses:", error);
@@ -189,8 +177,8 @@ const getListUsersFromApi = async () => {
 
 const getListFollowers = (data) => {
     return data.map(item => ({
-        id: item.assignee.id,
-        name: item.assignee.name,
+        id: item.id,
+        name: item.name,
     }));
 };
 
