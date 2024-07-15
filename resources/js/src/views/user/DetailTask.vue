@@ -228,9 +228,7 @@ export default defineComponent({
                     };
                 }));
                 this.listFollowers = resName.data;
-
                 this.textName = this.listSelectsName.find(item => item.id == this.detailUser?.assignee?.id && item.text == this.detailUser?.assignee?.name);
-
             } catch (error) {
                 console.error("Error get detail", error);
             }

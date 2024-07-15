@@ -83,7 +83,8 @@
         </draggable>
       </div>
     </div>
-    <div class="btn-primary w-24 h-8 flex items-center justify-center ml-auto rounded-md mt-10 cursor-pointer">Create
+    <div class="btn-primary w-24 h-8 flex items-center justify-center ml-auto rounded-md mt-10 cursor-pointer"
+      @click="createNewTask">Create
     </div>
   </div>
 </template>
@@ -96,6 +97,9 @@ import Work from '../../components/Work.vue';
 import { DELETE, PENCIL } from '../../constants/img';
 import BaseSelect from '../../components/BaseSelect.vue';
 import VueMultiselect from 'vue-multiselect'
+import { getListStatus } from '../../api/status';
+import { getListUsersName } from '../../api/user';
+import { createTask } from '../../api/task';
 
 export default defineComponent({
   components: {
@@ -105,6 +109,7 @@ export default defineComponent({
   created() {
     this.DELETE = DELETE;
     this.PENCIL = PENCIL;
+    this.getListStatusesFromApi();
   },
   data() {
     return {
@@ -113,36 +118,18 @@ export default defineComponent({
       isEditTitle: false,
       isEditDescription: false,
       isEditDeadline: false,
-      listSelects: [
-        { id: 0, text: "Select options" },
-        { id: 1, text: "Not start" },
-        { id: 2, text: "In process" },
-        { id: 3, text: "Pending" },
-        { id: 4, text: "Done" },
-      ],
-      listStatus: [
-        { id: 1, name: "Not Start" },
-        { id: 2, name: "In Process" },
-        { id: 3, name: "Pending" },
-        { id: 4, name: "Done" },
-      ],
-      listProcess: [
-      ],
+      listSelects: [],
+      listStatus: [],
+      listProcess: [],
       chooseYearInput: null,
       textName: { id: 0, text: "Select options" },
       textEmail: null,
       textTitle: null,
       textDescription: null,
       textDeadline: null,
+      textFilter: null,
       multiFollowers: [],
-      listFollowers: [
-        { id: 1, name: 'Vue.js' },
-        { id: 2, name: 'Adonis' },
-        { id: 3, name: 'Rails' },
-        { id: 4, name: 'Sinatra' },
-        { id: 5, name: 'Laravel' },
-        { id: 6, name: 'Phoenix' }
-      ]
+      listFollowers: []
     };
   },
   computed: {
@@ -153,6 +140,65 @@ export default defineComponent({
     },
   },
   methods: {
+    async createNewTask() {
+      try {
+        const param = {
+          user_id: this.textName.id,
+          title: this.textTitle,
+          description: this.textDescription,
+          deadline: this.textDeadline,
+          followers: [{ "id": 1 }, { "id": 2 }],
+          statuses: [{ "id": 1 }, { "id": 3 }],
+        }
+        const res = await createTask(param);
+        console.log(res.data)
+      }
+      catch (err) {
+        console.error("Error create:", error);
+
+      }
+    },
+
+    /**
+     * get list user name
+     */
+    async getListUserNameFromApi() {
+      try {
+        const res = await getListUsersName();
+        this.listFollowers = res.data;
+        this.listSelects = res.data.map(item => ({
+          id: item.id,
+          text: item.name,
+        }));
+        this.listSelects.unshift({ id: 0, text: "Select options" })
+      } catch (error) {
+        console.error("Error fetching list users:", error);
+      }
+    },
+
+    /**
+     * get list status
+     */
+    async getListStatusesFromApi() {
+      try {
+        const params = {
+          keyword: "",
+          process: 0,
+        };
+        const res = await getListStatus(params);
+        res.data.forEach(item => {
+          this.listStatus.push({
+            id: item?.id,
+            name: item?.name,
+          });
+        });
+        // get list user name
+        await this.getListUserNameFromApi();
+      } catch (error) {
+        console.error("Error fetching list statuses:", error);
+      }
+    },
+
     /**
      * update new value of textDescription
      * @param newValue

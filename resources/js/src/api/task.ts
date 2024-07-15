@@ -15,3 +15,12 @@ export const getListTask = (params) => {
 export const getTaskDetail = (id: any, params: any) => {
     return axios.get(`/task/${id}/detail`, { params });
 };
+
+/**
+ * API create task
+ * @param param
+ * @param id
+ */
+export const createTask = (params: any) => {
+    return axios.post(`task/create`, params);
+};
