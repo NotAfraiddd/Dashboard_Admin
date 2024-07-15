@@ -24,6 +24,6 @@ class Status extends Model
      */
     public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsToMany(Task::class, 'task_statuses');
     }
 }

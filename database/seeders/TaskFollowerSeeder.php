@@ -23,6 +23,11 @@ class TaskFollowerSeeder extends Seeder
         'user_id' => 1,
         'task_id' => 2,
       ],
+      [
+        'id' => 3,
+        'user_id' => 2,
+        'task_id' => 1,
+      ],
     ];
 
     foreach ($taskFollowers as $followerData) {

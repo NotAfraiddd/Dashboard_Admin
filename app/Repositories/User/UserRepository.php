@@ -24,14 +24,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
   }
 
   /**
-   * get user list
+   * Get user list
    * @param Request $request
-   * @return void
+   * @return \Illuminate\Http\JsonResponse
    */
   public function getUserList(Request $request)
   {
     try {
-      $query = $this->model->with('tasks.task_followers.user', 'tasks.statuses')->get();
+      $query = $this->model->with('tasks.followers', 'tasks.statuses', 'tasks.assignee')->get();
       return $query;
     } catch (Exception $ex) {
       Log::error('Get user list: ' . $ex);

@@ -47,7 +47,7 @@ class User extends Authenticatable
      */
     public function task_followers()
     {
-        return $this->hasMany(TaskFollower::class);
+        return $this->belongsToMany(Task::class, 'task_followers');
     }
 
     /**

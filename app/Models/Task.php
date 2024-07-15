@@ -26,22 +26,21 @@ class Task extends Model
      */
     public function statuses()
     {
-        return $this->hasMany(Status::class);
+        return $this->belongsToMany(Status::class, 'task_statuses');
     }
 
     /**
-     * Eloquent relationship with task_followers
+     * Eloquent relationship with followers (users following this task)
      */
-    public function task_followers()
+    public function followers()
     {
-        return $this->hasMany(TaskFollower::class);
+        return $this->belongsToMany(User::class, 'task_followers');
     }
 
-
     /**
-     * Eloquent relationship with assign
+     * Eloquent relationship with assignee (user assigned to this task)
      */
-    public function assign()
+    public function assignee()
     {
         return $this->belongsTo(User::class, 'assign_id');
     }
