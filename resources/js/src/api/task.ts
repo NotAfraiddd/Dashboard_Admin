@@ -6,3 +6,12 @@ import axios from "../config/axios";
 export const getListTask = (params) => {
     return axios.get("/tasks", { params });
 };
+
+/**
+ * API get task detail
+ * @param param
+ * @param id
+ */
+export const getTaskDetail = (id: any, params: any) => {
+    return axios.get(`/task/${id}/detail`, { params });
+};

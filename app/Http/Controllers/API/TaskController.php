@@ -48,4 +48,21 @@ class TaskController extends Controller
             return response()->json(['error' => 'Error server'], 500);
         }
     }
+
+    /**
+     * Detail task with specific task ID
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function detail($id, Request $request)
+    {
+        try {
+            $data = $this->taskRepo->getDetail($id, $request);
+            return response()->json($data);
+        } catch (Exception $ex) {
+            Log::error('Detail task: ' . $ex);
+            return response()->json(['error' => 'Error server'], 500);
+        }
+    }
 }

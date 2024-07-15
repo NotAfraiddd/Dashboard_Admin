@@ -8,9 +8,9 @@
                 Search
             </button>
         </div>
-        <BaseTable :data="tableData" :columns="tableColumns">
+        <BaseTable :data="tableData" :columns="tableColumns" @click-row="navigateDetailTask">
             <template #name="{ record }">
-                <div class="break-word text-overflow" @click="handleRowClick(record)">
+                <div class="break-word text-overflow">
                     {{ record.name }}
                 </div>
             </template>
@@ -22,7 +22,7 @@
             <template #users_follow="{ record }">
                 <div class="flex break-word flex-wrap text-overflow">
                     <span v-for="(user, index) in record.users_follow" :key="user" class="w-fit">
-                        <span class="hover:underline cursor-pointer" @click="handleRowClick(user)">
+                        <span class="">
                             {{ user.name }}
                         </span>
                         <span v-if="index < record.users_follow.length - 1">
@@ -75,7 +75,7 @@ const tableData = ref([]);
 const tableColumns = ref([
     {
         headerClass: "text-center",
-        columnClass: "hover:underline cursor-pointer",
+        columnClass: "",
         title: "Name",
         key: "name",
         slotName: "name",
@@ -133,18 +133,12 @@ const handleUpdateFilter = (newValue) => {
     textFilter.value = newValue;
 };
 
-/**
- * Function to handle go to detail user
- * @param data
- */
-const handleRowClick = (data) => {
-    localStorage.setItem('idTask', data.id_task)
-    router.push({ name: "DetailTask", params: { id: data.id } });
-};
+const navigateDetailTask = (data) => {
+    router.push({ name: "DetailTask", params: { id: data.id_task } });
+}
 
 const navigateCreateTask = () => {
     router.push({ name: "CreateTask" });
-
 }
 
 /**
@@ -175,6 +169,10 @@ const getListUsersFromApi = async () => {
     }
 }
 
+/**
+ * get list followers
+ * @param data 
+ */
 const getListFollowers = (data) => {
     return data.map(item => ({
         id: item.id,
@@ -182,6 +180,10 @@ const getListFollowers = (data) => {
     }));
 };
 
+/**
+ * get new list status
+ * @param data 
+ */
 const getNewListStatus = (data) => {
     return data.map(item => ({
         id: item.id,
@@ -190,7 +192,6 @@ const getNewListStatus = (data) => {
     }));
 };
 
-getListUsersFromApi();
 
 /**
  * get list status
@@ -213,6 +214,10 @@ const getListStatusesFromApi = async () => {
     }
 }
 
+/**
+ * list apis
+ */
+getListUsersFromApi();
 getListStatusesFromApi();
 
 </script>

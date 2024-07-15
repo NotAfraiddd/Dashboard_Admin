@@ -34,6 +34,7 @@ Route::post('/status/{status}/update', [StatusController::class, 'update']);
 
 // task
 Route::get('/tasks', [TaskController::class, 'index']);
+Route::get('/task/{task}/detail', [TaskController::class, 'detail']);
 Route::post('/task/create', [TaskController::class, 'create']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -22,7 +22,7 @@
                 <div class="w-1/4">Name</div>
                 <div class="w-3/4 ">
                     <div v-if="!isEditName" class="w-full flex justify-between items-center">
-                        <span>{{ detailUser.name }}</span>
+                        <span>{{ detailUser?.assignee?.name }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('name')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
@@ -37,7 +37,7 @@
                 <div class="w-1/4">Followers</div>
                 <div class="w-3/4 ">
                     <div v-if="!isEditFollowers" class="w-full flex justify-between items-center">
-                        <span>Chi Bao</span>
+                        <span>{{ textListFollowers }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
                             @click="handleEdit('followers')">
                     </div>
@@ -55,7 +55,7 @@
                 <div class="w-1/4">Email</div>
                 <div class="w-3/4">
                     <div v-if="!isEditEmail" class="w-full flex justify-between items-center">
-                        <span>{{ detailUser.email }}</span>
+                        <span>{{ detailUser?.assignee?.email }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('email')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
@@ -71,7 +71,7 @@
                 <div class="w-1/4">Title task</div>
                 <div class="w-3/4">
                     <div v-if="!isEditTitle" class="w-full flex justify-between items-center">
-                        <span>{{ detailUser.tasks[0].title }}</span>
+                        <span>{{ detailUser.title }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer" @click="handleEdit('title')">
                     </div>
                     <div v-else class="w-full flex justify-between items-center mr-3">
@@ -87,7 +87,7 @@
                 <div class="w-1/4">Description</div>
                 <div class="w-3/4">
                     <div v-if="!isEditDescription" class="w-full flex justify-between items-center">
-                        <span>{{ detailUser.tasks[0].description }}</span>
+                        <span>{{ detailUser.description }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
                             @click="handleEdit('description')">
                     </div>
@@ -103,7 +103,7 @@
                 <div class="w-1/4">Deadline</div>
                 <div class="w-3/4">
                     <div v-if="!isEditDeadline" class="w-full flex justify-between items-center">
-                        <span>{{ detailUser.tasks[0].deadline }}</span>
+                        <span>{{ detailUser.deadline }}</span>
                         <img :src="PENCIL" alt="" srcset="" class="w-5 h-5 cursor-pointer"
                             @click="handleEdit('deadline')">
                     </div>
@@ -150,7 +150,8 @@ import BaseInput from "../../components/BaseInput.vue";
 import Work from "../../components/Work.vue";
 import BaseSelect from '../../components/BaseSelect.vue';
 import VueMultiselect from 'vue-multiselect'
-import { getListUsersName, getUserDetail } from "../../api/user";
+import { getListUsersName } from "../../api/user";
+import { getTaskDetail } from "../../api/task";
 
 export default defineComponent({
     components: {
@@ -160,8 +161,7 @@ export default defineComponent({
     created() {
         this.DELETE = DELETE;
         this.PENCIL = PENCIL;
-        this.idTask = JSON.parse(localStorage.getItem('idTask'));
-        this.idTask && this.getDetailTaskOfUser(this.$route.params.id);
+        this.getDetailTask(this.$route.params.id);
     },
     data() {
         return {
@@ -188,6 +188,7 @@ export default defineComponent({
             textTitle: null,
             textDescription: null,
             textDeadline: null,
+            textListFollowers: null,
             multiFollowers: [],
             listFollowers: []
         };
@@ -204,19 +205,19 @@ export default defineComponent({
          * get detail task of user
          * @param data 
          */
-        async getDetailTaskOfUser(data) {
+        async getDetailTask(data) {
             try {
                 const params = {
                     task_id: this.idTask,
                 }
-                const res = await getUserDetail(data, params);
+                const res = await getTaskDetail(data, params);
                 this.detailUser = res.data;
-                this.textEmail = res.data.email;
-                this.textTitle = res.data.tasks[0].title;
-                this.textDescription = res.data.tasks[0].description;
-                this.textDeadline = res.data.tasks[0].deadline;
-                this.listProcess = res.data.tasks[0].statuses;
-                this.getUserFollowers(res.data.tasks[0].task_followers);
+                this.textEmail = res.data.assignee.email;
+                this.textTitle = res.data.title;
+                this.textDescription = res.data.description;
+                this.textDeadline = res.data.deadline;
+                this.listProcess = res.data.statuses;
+                this.getListFollowers(res.data.followers);
 
                 const resName = await getListUsersName();
                 this.listSelectsName.unshift({ id: 0, text: "Select options" });
@@ -226,8 +227,10 @@ export default defineComponent({
                         text: user.name
                     };
                 }));
+                this.listFollowers = resName.data;
 
-                this.textName = this.listSelectsName.find(item => item.id == this.detailUser?.id && item.text == this.detailUser?.name);
+                this.textName = this.listSelectsName.find(item => item.id == this.detailUser?.assignee?.id && item.text == this.detailUser?.assignee?.name);
+
             } catch (error) {
                 console.error("Error get detail", error);
             }
@@ -237,13 +240,13 @@ export default defineComponent({
          * get all list user follower
          * @param data 
          */
-        getUserFollowers(data) {
-            this.listFollowers = data.map(item => {
-                return ({
-                    id: item.user.id,
-                    name: item.user.name,
-                })
-            })
+        getListFollowers(data) {
+            this.multiFollowers = data.map(item => ({
+                id: item.id,
+                name: item.name,
+            }));
+
+            this.textListFollowers = data.map(item => item.name).join(', ');
         },
 
         /**

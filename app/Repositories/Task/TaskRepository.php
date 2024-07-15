@@ -57,4 +57,21 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
       return false;
     }
   }
+
+  /**
+   * get detail task 
+   * @param Request $request
+   * @return void
+   */
+  public function getDetail($id, Request $request)
+  {
+    try {
+      $task = Task::with('assignee', 'followers', 'statuses')->findOrFail($id);
+
+      return $task;
+    } catch (Exception $ex) {
+      Log::error('Error in getDetail method: ' . $ex->getMessage());
+      return response()->json(['error' => 'Error server'], 500);
+    }
+  }
 }
