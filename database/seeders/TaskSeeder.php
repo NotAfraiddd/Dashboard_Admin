@@ -17,14 +17,14 @@ class TaskSeeder extends Seeder
     $tasks = [
       [
         'id' => 1,
-        'assign_id' => 1,
+        'user_id' => 1,
         'title' => 'Task 1',
         'description' => 'Description of Task 1',
         'deadline' => now()->addDays(7),
       ],
       [
         'id' => 2,
-        'assign_id' => 1,
+        'user_id' => 1,
         'title' => 'Task 2',
         'description' => 'Description of Task 2',
         'deadline' => now()->addDays(14),

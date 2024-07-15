@@ -32,7 +32,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
   public function getTaskList(Request $request)
   {
     try {
-      $query = $this->model->with('status', 'task_followers', 'task_followers.user')->get();
+      $query = $this->model->with('followers', 'statuses', 'assignee')->get();
       return $query;
     } catch (Exception $ex) {
       Log::error('Get status list: ' . $ex);

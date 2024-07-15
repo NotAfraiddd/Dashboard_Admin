@@ -62,6 +62,7 @@ import BaseSelect from "../../components/BaseSelect.vue";
 import { useRouter } from "vue-router";
 import { getListStatus } from "../../api/status";
 import { getListUser } from "../../api/user";
+import { getListTask } from "../../api/task";
 
 const textFilter = ref("");
 const selectOption = ref({ id: 0, text: "Select options" });
@@ -155,21 +156,31 @@ const getListUsersFromApi = async () => {
             keyword: textFilter.value || "",
             process: selectOption.value.id || 0,
         };
-        const res = await getListUser(params);
+        const res = await getListTask(params);
         const arr = [];
-        res.data.forEach(user => {
-            user.tasks.forEach(task => {
-                arr.push({
-                    id_task: task.id,
-                    id: user?.id,
-                    name: user?.name,
-                    email: user?.email,
-                    task_title: task?.title,
-                    users_follow: getListFollowers(task?.task_followers),
-                    processes: getNewListStatus(task?.statuses),
-                })
+        res.data.forEach(task => {
+            arr.push({
+                id_task: task.id,
+                id: task?.id,
+                name: task?.name,
+                email: task?.email,
+                task_title: task?.title,
+                users_follow: getListFollowers(task?.assignee?.task_followers)
             })
-        })
+        });
+        // res.data.forEach(user => {
+        //     user.tasks.forEach(task => {
+        //         arr.push({
+        //             id_task: task.id,
+        //             id: user?.id,
+        //             name: user?.name,
+        //             email: user?.email,
+        //             task_title: task?.title,
+        //             users_follow: getListFollowers(task?.task_followers),
+        //             processes: getNewListStatus(task?.statuses),
+        //         })
+        //     })
+        // })
         tableData.value = arr;
     } catch (error) {
         console.error("Error fetching list statuses:", error);
@@ -178,8 +189,8 @@ const getListUsersFromApi = async () => {
 
 const getListFollowers = (data) => {
     return data.map(item => ({
-        id: item.user.id,
-        name: item.user.name,
+        id: item.assignee.id,
+        name: item.assignee.name,
     }));
 };
 
